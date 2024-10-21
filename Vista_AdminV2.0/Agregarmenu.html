@@ -3,21 +3,21 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Agregar Usuario</title>
-    <link rel="stylesheet" href="style4.css"> <!-- Asegúrate de tener el CSS adecuado -->
+    <title>Agregar Producto</title>
+    <link rel="stylesheet" href="style5.css"> <!-- Asegúrate de tener el CSS adecuado -->
 </head>
 <body>
     <div class="container">
-        <h2>Registrar Nuevo Menú</h2>
+        <h2>Registrar Nuevo Producto</h2>
         <form id="registroForm">
-            <label for="nombres">Nombre Producto:</label>
-            <input type="text" id="nombre" name="nombre" required>
+            <label for="tipo">Tipo de Producto:</label>
+            <input type="text" id="tipo" name="tipo" required>
 
-            <label for="apellidos">Descripcón:</label>
+            <label for="descripcion">Descripción:</label>
             <input type="text" id="descripcion" name="descripcion" required>
 
-            <label for="telefono">Precio:</label>
-            <input type="text" id="precio" name="precio" required>
+            <label for="precio">Precio:</label>
+            <input type="number" id="precio" name="precio" required step="0.01">
 
             <button type="submit">Agregar</button>
         </form>
@@ -31,7 +31,7 @@
             const datos = Object.fromEntries(formData.entries());
 
             try {
-                const response = await fetch('/guardar', {
+                const response = await fetch('/guardarprod', {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json'
@@ -41,7 +41,11 @@
 
                 const mensajeElement = document.getElementById('mensaje');
                 if (response.ok) {
-                    mensajeElement.textContent = 'Usuario registrado con éxito';
+                    mensajeElement.textContent = 'Producto registrado con éxito';
+                    // Redirige después de un breve tiempo
+                    setTimeout(() => {
+                        window.location.href = '/Vista_AdminV2.0/';
+                    }, 2000); // Redirige después de 2 segundos
                 } else {
                     const errorText = await response.text();
                     mensajeElement.textContent = `Error: ${errorText}`;

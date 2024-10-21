@@ -509,6 +509,52 @@ app.get('/api/productos', (req, res) => {
     });
 });
 
+// Eliminar un producto por ID
+app.delete('/api/productos/:id', (req, res) => {
+    const { id } = req.params;
+    const query = 'DELETE FROM producto WHERE id_producto = ?';
+    
+    connection.query(query, [id], (error, results) => {
+        if (error) {
+            console.error('Error al eliminar el producto:', error);
+            res.status(500).json({ message: 'Error al eliminar el producto' });
+        } else {
+            res.json({ message: 'Producto eliminado correctamente' });
+        }
+    });
+});
+
+// Actualizar un producto por ID
+app.put('/api/productos/:id', (req, res) => {
+    const id = req.params.id;
+    const { tipo, descripcion, precio } = req.body;
+
+    // Lógica para actualizar el producto en la base de datos
+    const query = 'UPDATE producto SET tipo = ?, descripcion = ?, precio = ? WHERE id_producto = ?';
+    
+    connection.query(query, [tipo, descripcion, precio, id], (error, results) => {
+        if (error) {
+            res.status(500).json({ error: 'Error al actualizar el producto' });
+        } else {
+            res.json({ message: 'Producto actualizado exitosamente' });
+        }
+    });
+});
+
+app.post('/guardarprod', (req, res) => {
+    const { tipo, descripcion, precio } = req.body;
+
+    const query = 'INSERT INTO producto (tipo, descripcion, precio) VALUES (?, ?, ?)';
+    connection.query(query, [tipo, descripcion, precio], (error, results) => {
+        if (error) {
+            console.error('Error al guardar el producto:', error);
+            return res.status(500).send('Error al guardar el producto');
+        }
+        res.status(201).send('Producto agregado exitosamente');
+    });
+});
+
+
 
 
 app.listen(port, () => {
